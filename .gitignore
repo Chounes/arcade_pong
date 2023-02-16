@@ -52,3 +52,7 @@ Mkfile.old
 dkms.conf
 /pong
 *.swp
+/menu
+/logger
+/services_log/pong.log
+/services_log/
