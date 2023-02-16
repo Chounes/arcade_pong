@@ -1,1 +1,4 @@
+#ifndef ARCADE_PONG_PONG_H
+#define ARCADE_PONG_PONG_H
 
+#endif //ARCADE_PONG_PONG_H
