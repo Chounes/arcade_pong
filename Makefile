@@ -1,29 +1,29 @@
 CC=gcc
 CFLAGS = -Wall -lncurses -std=c99 -o2 -g
-LDFLAGS_LINUX = -g -lncurses -ltinfo
-LDFLAGS=$(LDFLAGS_LINUX)
+LDFLAGS= -g -lncurses -ltinfo
 TARGET=pong
 
-all: $(TARGET) liblogger.so libmenu.so
+all: $(TARGET) liblogger.so libball.so
 
 $(TARGET): $(TARGET).o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 liblogger.so: src_logger/logger.o
-	$(CC) -shared $^ -o $@ $(LDFLAGS)
+	$(CC) -shared $^ -o $@
 
-libmenu.so: src_menu/menu.o
-	$(CC) -shared $^ -o $@ $(LDFLAGS)
+libball.so: src_ball/ball.o
+	$(CC) -shared $^ -o $@
 
 # lib
-logger.o: src_logger/$logger.c src_logger/logger.h
+logger.o: src_logger/logger.c src_logger/logger.h
 	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
-menu.o: src_menu/menu.c src_menu/menu.h
+ball.o: src_ball/ball.c src_ball/ball.h
 	$(CC) $(CFLAGS) -fPIC -c $< -o $@
+
 
 $(TARGET).o: $(TARGET).c $(TARGET).h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
 run:
 	./$(TARGET)

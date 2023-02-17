@@ -21,6 +21,7 @@ int start_log(char *file_path) {
     char *date = asctime(tm);
     date[strlen(date) - 1] = '\0';
     fprintf(log_file, "[%s]___: Start pong session\n", date);
+    printf("[%s]___: Start pong session\n", date);
     fclose(log_file);
 
 
@@ -37,6 +38,7 @@ int logger(char *message, char *file_path) {
     char *date = asctime(tm);
     date[strlen(date) - 1] = '\0';
     fprintf(log_file, "[%s]___: %s\n", date, message);
+    printf("[%s]___: %s\n", date, message);
     fclose(log_file);
 
     return 0;
