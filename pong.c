@@ -7,7 +7,6 @@
 #include <ncurses.h>
 #include "src_ball/ball.c"
 
-#define LOG_FILE_PATH "./services_log/pong.log"
 //#define DEBUG true
 
 char *choices[] = {
@@ -60,8 +59,9 @@ int console_menu() {
     scanf("%d", &choice);
     switch (choice) {
         case 0:
-            printf("You chose to play\n");
-            test();
+            logger("Starting game", LOG_FILE_PATH);
+            console_play();
+            logger("Game ended", LOG_FILE_PATH);
             break;
         case 1:
             printf("You chose to change settings\n");
@@ -76,6 +76,15 @@ int console_menu() {
         default:
             printf("You chose an invalid option\n");
             break;
+    }
+    return 0;
+}
+
+int console_play() {
+    struct Ball b = init_ball(5);
+    bool running = true;
+    while (running){
+        move_ball(&b);
     }
     return 0;
 }

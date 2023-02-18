@@ -43,3 +43,9 @@ int logger(char *message, char *file_path) {
 
     return 0;
 }
+
+int reset_log(char *file_path) {
+    FILE *log_file = fopen(file_path, "w");
+    fclose(log_file);
+    return 0;
+}
