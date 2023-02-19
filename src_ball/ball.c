@@ -29,12 +29,12 @@ struct Ball init_ball(int radius) {
 
     ball.radius = radius;
 
-    logger("Ball initialized", LOG_FILE_PATH);
+    logg("Ball initialized", LOG_FILE_PATH);
     char message[100];
     sprintf(message, "Ball position: x=%d, y=%d", ball.x, ball.y);
-    logger(message, LOG_FILE_PATH);
+    logg(message, LOG_FILE_PATH);
     sprintf(message, "win size : x=%d, y=%d", w.ws_col, w.ws_row);
-    logger(message, LOG_FILE_PATH);
+    logg(message, LOG_FILE_PATH);
 
     return ball;
 
@@ -56,17 +56,17 @@ int move_ball(struct Ball* ball) {
         int random = rand() % 3 + 1;
         ball->x_speed = (ball->x_speed > 0) ? random : -random;
         ball->x_speed *= -1;
-        logger("Ball hit the wall", LOG_FILE_PATH);
+        logg("Ball hit the wall", LOG_FILE_PATH);
     }
     if(ball->y + ball->radius >= w.ws_row || ball->y - ball->radius <= 0) {
         //generate random number between 1 and 3
         int random = rand() % 3 + 1;
         ball->y_speed = (ball->y_speed > 0) ? random : -random;
         ball->y_speed *= -1;
-        logger("Ball hit the wall", LOG_FILE_PATH);
+        logg("Ball hit the wall", LOG_FILE_PATH);
     }
     sprintf(message, "Ball position: x=%d, y=%d", ball->x, ball->y);
-    logger(message, LOG_FILE_PATH);
+    logg(message, LOG_FILE_PATH);
     return 0;
 
 }

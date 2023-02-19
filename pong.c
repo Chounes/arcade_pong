@@ -7,12 +7,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include "src_ball/ball.c"
-#include <signal.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/ioctl.h>
+
 
 
 int sound_pid = 0;
@@ -27,7 +22,7 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(argv[1], "-d") == 0) {
             DEBUG = true;
-            logger("Debug mod active\n", LOG_FILE_PATH);
+            log_all("Debug mod active\n", LOG_FILE_PATH);
         }
     }
     if(argc > 2){
@@ -36,7 +31,7 @@ int main(int argc, char *argv[]) {
         }
         else if (strcmp(argv[2], "-d") == 0) {
             DEBUG = true;
-            logger("Debug mod active\n", LOG_FILE_PATH);
+            log_all("Debug mod active\n", LOG_FILE_PATH);
         }
     }
     if (res != 0) {
@@ -44,17 +39,17 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     if (CONSOLE) {
-        logger("Starting game in console mode", LOG_FILE_PATH);
+        log_all("Starting game in console mode", LOG_FILE_PATH);
         printf(ANSI_COLOR_GREEN "%s", TITLE);
         printf(ANSI_COLOR_RESET "\n");
         res = console_menu();
     } else {
-        logger("Starting game in window mode\n", LOG_FILE_PATH);
+        log_all("Starting game in window mode\n", LOG_FILE_PATH);
         res = menu();
-//        if (res != 0) {
-//            logger("Error : menu failed to start\n", LOG_FILE_PATH);
-//            exit(1);
-//        }
+        if (res != 0) {
+            log_all("Error : menu failed to start\n", LOG_FILE_PATH);
+            exit(1);
+        }
     }
 
 //    if (sound_pid != 0) {
@@ -64,7 +59,7 @@ int main(int argc, char *argv[]) {
 }
 
 int menu(){
-    logger("Display menu\n", LOG_FILE_PATH);
+    logg("Display menu\n", LOG_FILE_PATH);
     WINDOW *menu_win;
     WINDOW *title_win;
     WINDOW *play_btn;
@@ -119,26 +114,21 @@ int menu(){
     wrefresh(exit_btn);
     if(DEBUG) wrefresh(debug_win);
 
-    bool menu = true;
-    while(menu){
-        int res = getch();
-        if(DEBUG) mvwprintw(debug_win, 1, 1, "Getch value : %d", res);
-        switch(res){
+    int c;
+    while((c = getch()) != 24){
+        if(DEBUG) mvwprintw(debug_win, 1, 1, "Getch value : %d", c);
+        switch(c){
             case KEY_UP:
-                clear();
                 if(DEBUG) mvwprintw(debug_win, 1, 1, "UP");
                 break;
             case KEY_DOWN:
-                clear();
                 if(DEBUG) mvwprintw(debug_win, 1, 1,"DOWN");
                 break;
-            case KEY_F(9):
-                menu = false;
             default:
+                if(DEBUG) wrefresh(debug_win);
                 break;
         }
         refresh();
-        if(DEBUG) wrefresh(debug_win);
     }
     endwin();
 
@@ -163,9 +153,9 @@ int console_menu() {
     scanf("%d", &choice);
     switch (choice) {
         case 0:
-            logger("Starting game", LOG_FILE_PATH);
+            log_all("Starting game", LOG_FILE_PATH);
             console_play();
-            logger("Game ended", LOG_FILE_PATH);
+            log_all("Game ended", LOG_FILE_PATH);
             break;
         case 1:
             printf("You chose to change settings\n");

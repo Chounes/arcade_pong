@@ -28,7 +28,7 @@ int start_log(char *file_path) {
     return 0;
 }
 
-int logger(char *message, char *file_path) {
+int logg(char *message, char *file_path) {
     FILE *log_file = fopen(file_path, "a");
     time_t rawtime;
     struct tm *tm;
@@ -38,9 +38,20 @@ int logger(char *message, char *file_path) {
     char *date = asctime(tm);
     date[strlen(date) - 1] = '\0';
     fprintf(log_file, "[%s]___: %s\n", date, message);
-    printf("[%s]___: %s\n", date, message);
     fclose(log_file);
+    return 0;
+}
 
+int log_all(char *message, char *file_path) {
+    time_t rawtime;
+    struct tm *tm;
+    time(&rawtime);
+    tm = localtime(&rawtime);
+    // remove date back line
+    char *date = asctime(tm);
+    date[strlen(date) - 1] = '\0';
+    printf("[%s]___: %s\n", date, message);
+    logg(message, file_path);
     return 0;
 }
 
