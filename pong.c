@@ -48,10 +48,6 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
     }
-
-//    if (sound_pid != 0) {
-//        kill(sound_pid, SIGKILL);
-//    }
     return 0;
 }
 
@@ -60,40 +56,37 @@ int menu() {
     int index = 0;
     WINDOW *menu_win;
     WINDOW *title_win;
-    // create windows (name, size, position, parent window
+    WINDOW *play_btn;
+    WINDOW *setting_btn;
+    WINDOW *exit_btn;
+    WINDOW *credit_btn;
     initscr();
     menu_win = subwin(stdscr, LINES, COLS, 0, 0);
     set_title(title_win);
     while (1) {
-        int res = menu_displayer(index, menu_win, title_win);
+        int res = menu_displayer(index, menu_win, title_win, play_btn, setting_btn, exit_btn, credit_btn);
         if (res != 0) {
             log_all("Error : menu failed to start\n", LOG_FILE_PATH);
             exit(1);
         }
 
         scanf("%c", &frapped_key);
-        if(frapped_key == 'w'){
-//            if (index > 0) {
-//                index--;
-//            } else {
-//                index = 3;
-//            }
-            set_title(title_win);
-        }
-        else if(frapped_key == 's'){
-//            if (index < 3) {
-//                index++;
-//            } else {
-//                index = 0;
-//            }
-            clear_title(title_win);
-        }
-        else if(frapped_key == 'q'){
+        if (frapped_key == 'w') {
+            if (index > 0) {
+                index--;
+            } else {
+                index = 3;
+            }
+        } else if (frapped_key == 's') {
+            if (index < 3) {
+                index++;
+            } else {
+                index = 0;
+            }
+        } else if (frapped_key == 'q') {
             break;
         }
     }
-//    free(menu_win);
-//    free(title_win);
     endwin();
     printf("Bye bye\n");
     return 0;
@@ -124,26 +117,86 @@ void set_title(WINDOW *title_win) {
     wrefresh(title_win);
 }
 
- void set_play_btn(WINDOW *play_btn,  int index) {
-     play_btn = subwin(stdscr, 5, 30, (LINES / 5), (COLS / 2) - 15);
-     box(play_btn, ACS_VLINE, ACS_HLINE);
-     if(index == 0){
-         mvwprintw(play_btn, 2, (30 / 2) - 2, ">PLAY<");
-     }
-     else{
-         mvwprintw(play_btn, 2, (30 / 2) - 2, "PLAY");
-     }
-     wrefresh(play_btn);
- }
+void set_play_btn(WINDOW *play_btn, int index) {
+    clear_play_btn(play_btn);
+    play_btn = subwin(stdscr, 5, 30, (LINES / 5), (COLS / 2) - 15);
+    box(play_btn, ACS_VLINE, ACS_HLINE);
+    if (index == 0) {
+        mvwprintw(play_btn, 2, (30 / 2) - 2, ">PLAY<");
+    } else {
+        mvwprintw(play_btn, 2, (30 / 2) - 2, "PLAY");
+    }
+    wrefresh(play_btn);
+}
+void clear_play_btn(WINDOW *play_btn) {
+    play_btn = subwin(stdscr, 5, 30, (LINES / 5), (COLS / 2) - 15);
+    werase(play_btn);
+    wrefresh(play_btn);
+}
 
- void clear_play_btn(WINDOW *play_btn) {
-     play_btn = subwin(stdscr, 5, 30, (LINES / 5), (COLS / 2) - 15);
-     werase(play_btn);
-     wrefresh(play_btn);
- }
+void clear_setting_btn(WINDOW *setting_btn) {
+    setting_btn = subwin(stdscr, 5, 30, (LINES / 5)*1.5, (COLS / 2) - 15);
+    werase(setting_btn);
+    wrefresh(setting_btn);
+}
 
-int menu_displayer(int index, WINDOW *menu_win, WINDOW *title_win) {
+void set_setting_btn(WINDOW *setting_btn, int index) {
+    clear_setting_btn(setting_btn);
+    setting_btn = subwin(stdscr, 5, 30, (LINES / 5)*1.5, (COLS / 2) - 15);
+    box(setting_btn, ACS_VLINE, ACS_HLINE);
+    if (index == 1) {
+        mvwprintw(setting_btn, 2, (30 / 2) - 4, ">SETTINGS<");
+    } else {
+        mvwprintw(setting_btn, 2, (30 / 2) - 4, "SETTINGS");
+    }
+    wrefresh(setting_btn);
+}
+
+
+
+void set_exit_btn(WINDOW *exit_btn, int index) {
+    clear_exit_btn(exit_btn);
+    exit_btn = subwin(stdscr, 5, 30, (LINES / 5)*2.5, (COLS / 2) - 15);
+    box(exit_btn, ACS_VLINE, ACS_HLINE);
+    if (index == 3) {
+        mvwprintw(exit_btn, 2, (30 / 2) - 2, ">EXIT<");
+    } else {
+        mvwprintw(exit_btn, 2, (30 / 2) - 2, "EXIT");
+    }
+    wrefresh(exit_btn);
+}
+
+void clear_exit_btn(WINDOW *exit_btn) {
+    exit_btn = subwin(stdscr, 5, 30, (LINES / 5)*2.5, (COLS / 2) - 15);
+    werase(exit_btn);
+    wrefresh(exit_btn);
+}
+
+void set_credit_btn(WINDOW *credit_btn, int index) {
+    clear_credit_btn(credit_btn);
+    credit_btn = subwin(stdscr, 5, 30, (LINES / 5)*2, (COLS / 2) - 15);
+    box(credit_btn, ACS_VLINE, ACS_HLINE);
+    if (index == 2) {
+        mvwprintw(credit_btn, 2, (30 / 2) - 3, ">CREDITS<");
+    } else {
+        mvwprintw(credit_btn, 2, (30 / 2) - 3, "CREDITS");
+    }
+    wrefresh(credit_btn);
+}
+
+void clear_credit_btn(WINDOW *credit_btn) {
+    credit_btn = subwin(stdscr, 5, 30, (LINES / 5)*2, (COLS / 2) - 15);
+    werase(credit_btn);
+    wrefresh(credit_btn);
+}
+
+int menu_displayer(int index, WINDOW *menu_win, WINDOW *title_win, WINDOW *play_btn, WINDOW *setting_btn, WINDOW *exit_btn, WINDOW *credit_btn) {
     logg("Display menu\n", LOG_FILE_PATH);
+    set_play_btn(play_btn, index);
+    set_setting_btn(setting_btn, index);
+    set_exit_btn(exit_btn, index);
+    set_credit_btn(credit_btn, index);
+
     wrefresh(menu_win);
     return 0;
 }

@@ -37,12 +37,18 @@ int console_menu();
 int console_credits();
 int console_play();
 int console_settings();
-int menu_displayer(int index, WINDOW *menu_win, WINDOW *title_win);
+int menu_displayer(int index, WINDOW *menu_win, WINDOW *title_win, WINDOW *play_btn, WINDOW *setting_btn, WINDOW *credits_win, WINDOW *exit_btn);
 void set_title(WINDOW *title_win);
 void clear_title(WINDOW *title_win);
 void clear_menu(WINDOW *menu_win);
 void set_play_btn(WINDOW *play_btn, int index);
-void clear_play_btn(WINDOW *play_btn);
+void clear_play_btn(WINDOW *play_btn);\
+void set_setting_btn(WINDOW *setting_btn, int index);
+void clear_setting_btn(WINDOW *setting_btn);
+void set_credits(WINDOW *credits_win, int index);
+void clear_credits(WINDOW *credits_win);
+void set_exit_btn(WINDOW *exit_btn, int index);
+void clear_exit_btn(WINDOW *exit_btn);
 
 
 #endif //ARCADE_PONG_PONG_H
