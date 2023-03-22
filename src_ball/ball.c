@@ -52,15 +52,15 @@ int move_ball(struct Ball* ball) {
     srand( time( NULL ) );
 
     if (ball->x + ball->radius >= w.ws_col || ball->x - ball->radius <= 0) {
-        //generate random number between 1 and 3
-        int random = rand() % 3 + 1;
+        //generate random number between 7 and 5
+        int random = rand() % 2 + 1;
         ball->x_speed = (ball->x_speed > 0) ? random : -random;
         ball->x_speed *= -1;
         logg("Ball hit the wall", LOG_FILE_PATH);
     }
     if(ball->y + ball->radius >= w.ws_row || ball->y - ball->radius <= 0) {
         //generate random number between 1 and 3
-        int random = rand() % 3 + 1;
+        int random = rand() % 2 + 1;
         ball->y_speed = (ball->y_speed > 0) ? random : -random;
         ball->y_speed *= -1;
         logg("Ball hit the wall", LOG_FILE_PATH);

@@ -13,10 +13,6 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 
-#define DOWN 4
-#define UP 3
-#define LEFT 2
-#define RIGHT 5
 #define PLAY_IDX 0
 #define SETTING_IDX 1
 #define CREDIT_IDX 2
@@ -49,6 +45,7 @@ void set_credit_btn(WINDOW *credits_win, int index);
 void clear_credit_btn(WINDOW *credits_win);
 void set_exit_btn(WINDOW *exit_btn, int index);
 void clear_exit_btn(WINDOW *exit_btn);
+int gameboard();
 
 
 #endif //ARCADE_PONG_PONG_H
