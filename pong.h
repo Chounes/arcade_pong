@@ -13,10 +13,14 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 
-#define DOWN 1
-#define UP 2
-#define LEFT 3
-#define RIGHT 4
+#define DOWN 4
+#define UP 3
+#define LEFT 2
+#define RIGHT 5
+#define PLAY_IDX 0
+#define SETTING_IDX 1
+#define CREDIT_IDX 2
+#define EXIT_IDX 3
 
 
 const char *AUTHOR= " ██████╗██╗  ██╗ ██████╗ ██╗   ██╗███╗   ██╗███████╗\n██╔════╝██║  ██║██╔═══██╗██║   ██║████╗  ██║██╔════╝\n██║     ███████║██║   ██║██║   ██║██╔██╗ ██║█████╗\n██║     ██╔══██║██║   ██║██║   ██║██║╚██╗██║██╔══╝\n╚██████╗██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║███████╗\n ╚═════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝\n";
@@ -33,10 +37,6 @@ bool DEBUG = false;
 
 
 int menu();
-int console_menu();
-int console_credits();
-int console_play();
-int console_settings();
 int menu_displayer(int index, WINDOW *menu_win, WINDOW *title_win, WINDOW *play_btn, WINDOW *setting_btn, WINDOW *credits_win, WINDOW *exit_btn);
 void set_title(WINDOW *title_win);
 void clear_title(WINDOW *title_win);
@@ -45,8 +45,8 @@ void set_play_btn(WINDOW *play_btn, int index);
 void clear_play_btn(WINDOW *play_btn);\
 void set_setting_btn(WINDOW *setting_btn, int index);
 void clear_setting_btn(WINDOW *setting_btn);
-void set_credits(WINDOW *credits_win, int index);
-void clear_credits(WINDOW *credits_win);
+void set_credit_btn(WINDOW *credits_win, int index);
+void clear_credit_btn(WINDOW *credits_win);
 void set_exit_btn(WINDOW *exit_btn, int index);
 void clear_exit_btn(WINDOW *exit_btn);
 
