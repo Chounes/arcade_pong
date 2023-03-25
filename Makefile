@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS = -Wall -lncurses -std=c99 -o2 -g
-LDFLAGS= -g -lncurses -ltinfo
+CFLAGS = -Wall -std=c99 `sdl2-config --cflags`
+LDFLAGS= `sdl2-config --libs`
 TARGET=pong
 
 all: $(TARGET) liblogger.so libball.so libsound.so
@@ -34,10 +34,8 @@ $(TARGET).o: $(TARGET).c $(TARGET).h
 install:
 	# install mplayer
 	sudo apt-get install mplayer
-	# install libncurses5-dev
-	sudo apt-get install libncurses5-dev
-	# install libncursesw5-dev
-	sudo apt-get install libncursesw5-dev
+
+
 
 run:
 	./$(TARGET)

@@ -28,7 +28,7 @@ int start_log(char *file_path) {
     return 0;
 }
 
-int logg(char *message, char *file_path) {
+int logg(const char *message, char *file_path) {
     FILE *log_file = fopen(file_path, "a");
     time_t rawtime;
     struct tm *tm;
@@ -42,7 +42,7 @@ int logg(char *message, char *file_path) {
     return 0;
 }
 
-int log_all(char *message, char *file_path) {
+int log_all(const char *message, char *file_path) {
     time_t rawtime;
     struct tm *tm;
     time(&rawtime);

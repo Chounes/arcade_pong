@@ -2,50 +2,27 @@
 #define ARCADE_PONG_PONG_H
 
 #include <stdbool.h>
-#include <ncurses.h>
-
-#define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_GREEN   "\x1b[32m"
-#define ANSI_COLOR_YELLOW  "\x1b[33m"
-#define ANSI_COLOR_BLUE    "\x1b[34m"
-#define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
+#include <SDL2/SDL.h>
 
 
-#define PLAY_IDX 0
-#define SETTING_IDX 1
-#define CREDIT_IDX 2
-#define EXIT_IDX 3
-
-
-const char *AUTHOR= " ██████╗██╗  ██╗ ██████╗ ██╗   ██╗███╗   ██╗███████╗\n██╔════╝██║  ██║██╔═══██╗██║   ██║████╗  ██║██╔════╝\n██║     ███████║██║   ██║██║   ██║██╔██╗ ██║█████╗\n██║     ██╔══██║██║   ██║██║   ██║██║╚██╗██║██╔══╝\n╚██████╗██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║███████╗\n ╚═════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝\n";
-const char *TITLE= "8888888b.   .d88888b.  888b    888  .d8888b.  \n888   Y88b d88P   Y88b 8888b   888 d88P  Y88b \n888    888 888     888 88888b  888 888    888 \n888   d88P 888     888 888Y88b 888 888        \n8888888P   888     888 888 Y88b888 888  88888 \n888        888     888 888  Y88888 888    888\n888        Y88b. .d88P 888   Y8888 Y88b  d88P \n888          Y88888P   888    Y888  Y8888P88 \n\n\n";
-#define LOG_FILE_PATH "./services_log/pong.log"
-const char *choices[] = {
-        "PLAY",
-        "SETTINGS",
-        "CREDITS",
-        "EXIT",
-};
 bool CONSOLE = false;
 bool DEBUG = false;
 
+SDL_Color WHITE = {255, 255, 255, 255};
+SDL_Color BLACK = {0, 0, 0, 255};
+SDL_Color RED = {255, 0, 0, 255};
+SDL_Color GREEN = {0, 255, 0, 255};
+SDL_Color BLUE = {0, 0, 255, 255};
+SDL_Color CYAN = {0, 255, 255, 255};
 
-int menu();
-int menu_displayer(int index, WINDOW *menu_win, WINDOW *title_win, WINDOW *play_btn, WINDOW *setting_btn, WINDOW *credits_win, WINDOW *exit_btn);
-void set_title(WINDOW *title_win);
-void clear_title(WINDOW *title_win);
-void clear_menu(WINDOW *menu_win);
-void set_play_btn(WINDOW *play_btn, int index);
-void clear_play_btn(WINDOW *play_btn);\
-void set_setting_btn(WINDOW *setting_btn, int index);
-void clear_setting_btn(WINDOW *setting_btn);
-void set_credit_btn(WINDOW *credits_win, int index);
-void clear_credit_btn(WINDOW *credits_win);
-void set_exit_btn(WINDOW *exit_btn, int index);
-void clear_exit_btn(WINDOW *exit_btn);
-int gameboard();
+struct WINDOW {
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+};
 
 
+struct WINDOW* setupWindow(int width, int height);
+int destroyWindow(struct WINDOW *window);
+int setWindowColor(struct WINDOW* window, SDL_Color color);
+int setStartBtn(struct WINDOW* window);
 #endif //ARCADE_PONG_PONG_H
