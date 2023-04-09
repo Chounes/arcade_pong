@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS = -Wall -std=c99 `sdl2-config --cflags`
-LDFLAGS= `sdl2-config --libs`
+CFLAGS= -Wall -std=c99
+LDFLAGS= -lm -lSDL2 -lSDL2_ttf
 TARGET=pong
 
 all: $(TARGET) liblogger.so libball.so libsound.so

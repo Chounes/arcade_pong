@@ -7,116 +7,84 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include "src_ball/ball.c"
+#include <SDL2/SDL_ttf.h>
 
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
 
-int main(int argc, char *argv[]) {
-    int res = start_log(LOG_FILE_PATH);
-    int status = EXIT_FAILURE;
+void renderText(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *rect)
+{
 
-    if (argc > 1) {
-        if (strcmp(argv[1], "-c") == 0) {
-            CONSOLE = true;
-        } else if (strcmp(argv[1], "-d") == 0 || strcmp(argv[1], "--debug") == 0) {
-            DEBUG = true;
-            log_all("Debug mod active", LOG_FILE_PATH);
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text, WHITE);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    SDL_RenderCopy(renderer, texture, NULL, rect);
+    SDL_DestroyTexture(texture);
+}
+
+int main(int argc, char *argv[])
+{
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+
+    SDL_Window *window = SDL_CreateWindow("SDL Button", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    TTF_Font *font = TTF_OpenFont("font.ttf", 24);
+    SDL_Rect playButtonRect = {SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 7 - 25, 100, 50};
+    SDL_Rect settingButtonRect = {SCREEN_WIDTH / 2 - 50, (SCREEN_HEIGHT / 7)*3 - 25, 100, 50};
+    SDL_Rect quitButtonRect = {SCREEN_WIDTH / 2 - 50, (SCREEN_HEIGHT / 7)*5 - 25, 100, 50};
+    SDL_Event event;
+    int running = true;
+
+    while (running)
+    {
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_QUIT)
+            {
+                running = 0;
+            }
+            else if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                int mouseX = event.button.x;
+                int mouseY = event.button.y;
+                if (mouseX >= playButtonRect.x && mouseX <= playButtonRect.x + playButtonRect.w && mouseY >= playButtonRect.y && mouseY <= playButtonRect.y + playButtonRect.h)
+                {
+                    printf("Play!\n");
+                }
+                if (mouseX >= settingButtonRect.x && mouseX <= settingButtonRect.x + settingButtonRect.w && mouseY >= settingButtonRect.y && mouseY <= settingButtonRect.y + settingButtonRect.h)
+                {
+                    printf("Setting!\n");
+                }
+                if (mouseX >= quitButtonRect.x && mouseX <= quitButtonRect.x + quitButtonRect.w && mouseY >= quitButtonRect.y && mouseY <= quitButtonRect.y + quitButtonRect.h)
+                {
+                    printf("Quit!\n");
+                    running = false;
+                }
+            }
         }
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &playButtonRect);
+        SDL_RenderFillRect(renderer, &settingButtonRect);
+        SDL_RenderFillRect(renderer, &quitButtonRect);
+
+        renderText(renderer, font, "PLAY", &playButtonRect);
+        renderText(renderer, font, "SETTING", &settingButtonRect);
+        renderText(renderer, font, "QUIT", &quitButtonRect);
+
+        SDL_RenderPresent(renderer);
     }
 
-    if (res != 0) {
-        printf("Error : logfile may be not accessible or does not exist");
-        return status;
-    }
-
-    reset_log(LOG_FILE_PATH);
-    log_all("Starting game in window mode", LOG_FILE_PATH);
-
-
-    // Init SDL
-    if (0 != SDL_Init(SDL_INIT_VIDEO)) {
-        log_all("Error : SDL_Init failed", LOG_FILE_PATH);
-        log_all(SDL_GetError(), LOG_FILE_PATH);
-        status = EXIT_FAILURE;
-        goto Quit;
-    }
-
-    struct WINDOW *window = setupWindow(800, 800);
-
-    SDL_Delay(3000);
-
-    setStartBtn(window);
-
-    SDL_Delay(3000);
-    destroyWindow(window);
-
-
-    status = EXIT_SUCCESS;
-    Quit:
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
-    exit(status);
-}
 
-
-struct WINDOW *setupWindow(int width, int height) {
-    struct WINDOW *window = malloc(sizeof(struct WINDOW));
-    window->window = NULL;
-    window->renderer = NULL;
-    window->window = SDL_CreateWindow("PONG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,width, height, SDL_WINDOW_SHOWN);
-    if (NULL == window) {
-        log_all("Error : SDL_CreateWindow failed", LOG_FILE_PATH);
-        log_all(SDL_GetError(), LOG_FILE_PATH);
-        goto Quit;
-    }
-    window->renderer = SDL_CreateRenderer(window->window, -1, SDL_RENDERER_ACCELERATED);
-    if (NULL == window->renderer) {
-        fprintf(stderr, "Erreur SDL_CreateRenderer : %s", SDL_GetError());
-        goto Quit;
-    }
-
-    setWindowColor(window, BLACK);
-
-    return window;
-    Quit:
-    destroyWindow(window);
-    SDL_Quit();
-    exit(EXIT_FAILURE);
-}
-
-int destroyWindow(struct WINDOW *window) {
-    if (NULL != window->renderer) {
-        SDL_DestroyRenderer(window->renderer);
-    }
-    if (NULL != window->window) {
-        SDL_DestroyWindow(window->window);
-    }
-    free(window);
     return 0;
 }
-
-int setWindowColor(struct WINDOW* window, SDL_Color color) {
-    if (SDL_SetRenderDrawColor(window->renderer, color.r, color.g, color.b, color.a) != 0) {
-        log_all("Error : SDL_SetRenderDrawColor failed", LOG_FILE_PATH);
-        log_all(SDL_GetError(), LOG_FILE_PATH);
-        destroyWindow(window);
-        SDL_Quit();
-        exit(EXIT_FAILURE);
-    }
-    SDL_RenderClear(window->renderer);
-    SDL_RenderPresent(window->renderer);
-    return 0;
-}
-
-int setStartBtn(struct WINDOW* window) {
-    // Get the window size
-    int winWidth, winHeight;
-    SDL_GetWindowSize(window->window, &winWidth, &winHeight);
-    SDL_Rect rect;
-    rect.x = winWidth / 2 - 50;
-    rect.y = winHeight / 3  + winHeight/6 - 25;
-    rect.w = 100;
-    rect.h = 50;
-    SDL_SetRenderDrawColor(window->renderer, CYAN.r, CYAN.g, CYAN.b, CYAN.a);
-    SDL_RenderDrawRects(window->renderer, &rect,4);
-    SDL_RenderPresent(window->renderer);
-    return 0;
-}
-
