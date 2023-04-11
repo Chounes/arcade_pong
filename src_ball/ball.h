@@ -4,7 +4,8 @@
 
 #ifndef ARCADE_PONG_BALL_H
 #define ARCADE_PONG_BALL_H
-#define LOG_FILE_PATH "./services_log/pong.log"
+
+#include <stdbool.h>
 
 struct Ball {
     int x;
@@ -12,9 +13,12 @@ struct Ball {
     int x_speed;
     int y_speed;
     int radius;
+    bool is_alive;
+    bool is_debug_mode;
+    char* log_file_path;
 };
 
-struct Ball init_ball(int radius);
+struct Ball init_ball(int radius, bool debugMode, char* logFilePath);
 
 int move_ball(struct Ball* ball);
 

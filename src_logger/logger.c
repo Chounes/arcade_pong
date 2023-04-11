@@ -3,14 +3,11 @@
 #include "logger.h"
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 // Create logfile for current launch
-int start_log(char *file_path) {
-    time_t rawtime;
-    struct tm *tm;
-    time(&rawtime);
-    tm = localtime(&rawtime);
+int initLog(char *file_path) {
     // Open file in filepath in append mode
     FILE *log_file = fopen(file_path, "a");
     if (log_file == NULL) {
@@ -18,45 +15,44 @@ int start_log(char *file_path) {
         exit(1);
     }
     // remove date back line
-    char *date = asctime(tm);
-    date[strlen(date) - 1] = '\0';
-    fprintf(log_file, "[%s]___: Start pong session\n", date);
-    printf("[%s]___: Start pong session\n", date);
+    printf("[%s]___: Start pong session\n", getDate());
+    fprintf(log_file, "[%s]___: Start pong session\n", getDate());
     fclose(log_file);
-
-
     return 0;
 }
 
-int logg(const char *message, char *file_path) {
+int loggerInfo(const char *message, char *file_path) {
     FILE *log_file = fopen(file_path, "a");
-    time_t rawtime;
-    struct tm *tm;
-    time(&rawtime);
-    tm = localtime(&rawtime);
-    // remove date back line
-    char *date = asctime(tm);
-    date[strlen(date) - 1] = '\0';
-    fprintf(log_file, "[%s]___: %s\n", date, message);
+    printf("[%s]___: %s\n", getDate(), message);
+    fprintf(log_file, "[%s]___: %s\n", getDate(), message);
     fclose(log_file);
     return 0;
 }
 
-int log_all(const char *message, char *file_path) {
-    time_t rawtime;
-    struct tm *tm;
-    time(&rawtime);
-    tm = localtime(&rawtime);
-    // remove date back line
-    char *date = asctime(tm);
-    date[strlen(date) - 1] = '\0';
-    printf("[%s]___: %s\n", date, message);
-    logg(message, file_path);
+int loggerDebug(const char *message, char *file_path, bool debug) {
+    if (!debug) {
+        return 0;
+    }
+    FILE *log_file = fopen(file_path, "a");
+    printf("[%s][DEBUG]___: %s\n", getDate(), message);
+    fprintf(log_file, "[%s][DEBUG]___: %s\n", getDate(), message);
+    fclose(log_file);
     return 0;
 }
 
-int reset_log(char *file_path) {
+int loggerClean(char *file_path) {
     FILE *log_file = fopen(file_path, "w");
     fclose(log_file);
     return 0;
+}
+
+char* getDate() {
+    time_t rawtime;
+    struct tm *tm;
+    time(&rawtime);
+    tm = localtime(&rawtime);
+    // remove date back line
+    char *date = asctime(tm);
+    date[strlen(date) - 1] = '\0';
+    return date;
 }

@@ -32,14 +32,28 @@ $(TARGET).o: $(TARGET).c $(TARGET).h
 	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
 
 install:
-	# install mplayer
-	sudo apt-get install mplayer
+	# install SDL2
+	sudo apt-get install libsdl2-dev
+	# install SDL2_ttf
+	sudo apt-get install libsdl2-ttf-dev
 
 
+runDebug:
+	./$(TARGET) --debug --dir "./services_log/pong.log"
 
 run:
 	./$(TARGET)
 
+help:
+	@echo "---------------HELP-----------------"
+	@echo "make all: compile all"
+	@echo "make clean: clean all"
+	@echo "make mrproper: clean all and remove executable"
+	@echo "make install: install SDL2 and SDL2_ttf"
+	@echo "Options:"
+	@echo "--debug: enable debug mode"
+	@echo "--dir: set the directory of the log file"
+	@echo "------------------------------------"
 clean:
 	rm -f *.o $(TARGET)
 

@@ -1,16 +1,22 @@
 #ifndef ARCADE_PONG_LOGGER_H
 #define ARCADE_PONG_LOGGER_H
 
+#include <stdio.h>
+#include <stdbool.h>
+
 // Create logfile for current launch
-int start_log(char* file_path);
+int initLog(char* file_path);
 
 // Log message in file
-int logg(const char* message, char* file_path);
+int loggerInfo(const char* message, char* file_path);
 
 // Reset log file
-int reset_log(char* file_path);
+int loggerClean(char* file_path);
 
 // Log message in file and in console
-int log_all(const char* message, char* file_path);
+int loggerDebug(const char* message, char* file_path, bool debug);
+
+// Get current date
+char* getDate();
 
 #endif //ARCADE_PONG_LOGGER_H

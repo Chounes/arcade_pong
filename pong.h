@@ -3,10 +3,11 @@
 
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 
-bool CONSOLE = false;
 bool DEBUG = false;
+char* LOG_FILE = "./pong.log";
 
 SDL_Color WHITE = {255, 255, 255, 255};
 SDL_Color BLACK = {0, 0, 0, 255};
@@ -21,8 +22,8 @@ struct WINDOW {
 };
 
 
-struct WINDOW* setupWindow(int width, int height);
-int destroyWindow(struct WINDOW *window);
-int setWindowColor(struct WINDOW* window, SDL_Color color);
-int setStartBtn(struct WINDOW* window);
+void renderText(SDL_Renderer *renderer, TTF_Font *font, const char *text, SDL_Rect *rect);
+int menuLoop(SDL_Window *window, SDL_Renderer *renderer );
+void badArgumentsError();
+void tooManyArgumentsError();
 #endif //ARCADE_PONG_PONG_H

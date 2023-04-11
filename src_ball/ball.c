@@ -10,10 +10,7 @@
 #include "../src_logger/logger.h"
 
 
-
-
-struct Ball init_ball(int radius) {
-
+struct Ball init_ball(int radius, bool debugMode, char* logFilePath) {
     struct Ball ball;
 
     struct winsize w;
@@ -29,12 +26,18 @@ struct Ball init_ball(int radius) {
 
     ball.radius = radius;
 
-    logg("Ball initialized", LOG_FILE_PATH);
+    ball.is_alive = true;
+
+    ball.is_debug_mode = debugMode;
+
+    ball.log_file_path = logFilePath;
+
+    loggerDebug("Ball initialized", ball.log_file_path, ball.is_debug_mode);
     char message[100];
     sprintf(message, "Ball position: x=%d, y=%d", ball.x, ball.y);
-    logg(message, LOG_FILE_PATH);
+    loggerDebug(message, ball.log_file_path, ball.is_debug_mode);
     sprintf(message, "win size : x=%d, y=%d", w.ws_col, w.ws_row);
-    logg(message, LOG_FILE_PATH);
+    loggerDebug(message, ball.log_file_path, ball.is_debug_mode);
 
     return ball;
 
@@ -56,17 +59,17 @@ int move_ball(struct Ball* ball) {
         int random = rand() % 2 + 1;
         ball->x_speed = (ball->x_speed > 0) ? random : -random;
         ball->x_speed *= -1;
-        logg("Ball hit the wall", LOG_FILE_PATH);
+        loggerDebug("Ball hit the wall", ball->log_file_path, ball->is_debug_mode);
     }
     if(ball->y + ball->radius >= w.ws_row || ball->y - ball->radius <= 0) {
         //generate random number between 1 and 3
         int random = rand() % 2 + 1;
         ball->y_speed = (ball->y_speed > 0) ? random : -random;
         ball->y_speed *= -1;
-        logg("Ball hit the wall", LOG_FILE_PATH);
+        loggerDebug("Ball hit the wall", ball->log_file_path, ball->is_debug_mode);
     }
     sprintf(message, "Ball position: x=%d, y=%d", ball->x, ball->y);
-    logg(message, LOG_FILE_PATH);
+    loggerDebug(message, ball->log_file_path, ball->is_debug_mode);
     return 0;
 
 }
